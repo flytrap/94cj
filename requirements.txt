@@ -2,7 +2,6 @@ Flask==1.1.2
 selenium==3.141.0
 mysqlclient==2.0.1
 Werkzeug==1.0.1
-mysql==0.0.2
 pip==20.1
 click==7.1.2
 lxml==4.5.2
@@ -14,7 +13,6 @@ Jinja2==2.11.2
 cssselect==1.1.0
 itsdangerous==1.1.0
 certifi==2020.6.20
-public==0.0.0
 wheel==0.34.2
 pinyin==0.4.0
 urllib3==1.25.10
