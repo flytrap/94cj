@@ -1,0 +1,1135 @@
+{% extends 'base.html' %}
+{% block content %}
+<form class="layui-form layui-form-pane">
+    <input type="hidden" name="规则ID" value="{{info.规则ID}}">
+    <input type="hidden" id="wz" name="未知规则" value="{{info.自定义集合索引}}">
+    <div class="layui-collapse" lay-filter="test">
+        <div class="layui-colla-item">
+            <h2 class="layui-colla-title">基本信息</h2>
+            <div class="layui-colla-content">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">规则名称</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="规则名称" lay-verify="required" autocomplete="off"
+                                   placeholder="请输入规则名称 如:笔趣阁"
+                                   class="layui-input" value="{{info.规则名称}}">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">网站地址</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="网站地址" lay-verify="required" autocomplete="off"
+                                   placeholder="请输入网站地址 如:http://www.biquge.com"
+                                   class="layui-input" value="{{info.网站地址}}">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">网站编码</label>
+                        <div class="layui-input-block">
+                            <select name="网站编码" lay-verify="required">
+                                <option value="">请选择</option>
+                                {% if info.网站编码 == 'utf8' %}
+                                <option value="utf8" selected="selected">utf-8</option>
+                                <option value="gbk">gbk/gb2312</option>
+                                {% elif info.网站编码 == 'gbk' %}
+                                <option value="utf8">utf-8</option>
+                                <option value="gbk" selected="selected">gbk/gb2312</option>
+                                {% else %}
+                                <option value="utf8">utf-8</option>
+                                <option value="gbk">gbk/gb2312</option>
+                                {% endif %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">参数类型</label>
+                        <div class="layui-input-block">
+                            <select name="参数类型" lay-verify="required">
+                                <option value="">请选择 是否添加‘t’参数绕过源站缓存</option>
+                                {% if info.参数类型 == '0' %}
+                                <option value="0" selected="selected">启用</option>
+                                <option value="1">不启用</option>
+                                {% elif info.参数类型 == '1' %}
+                                <option value="0">启用</option>
+                                <option value="1" selected="selected">不启用</option>
+                                {% else %}
+                                <option value="0">启用</option>
+                                <option value="1">不启用</option>
+                                {% endif %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">目标地址</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="目标地址" lay-verify="required" autocomplete="off"
+                               placeholder="请输入目标地址 如:http://www.biquge.com"
+                               class="layui-input" value="{{info.目标地址}}">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-colla-item">
+            <h2 class="layui-colla-title">列表页设置</h2>
+            <div class="layui-colla-content">
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">列表页内容替换</label>
+                    <div class="layui-input-block">
+            <textarea name="列表内容替换" required lay-verify="title"
+                      placeholder="一行一个替换规则(都是替换为空),|#|分割替换内容 如: 1|#|2 就是把所有1换成2 实例二 1|#|2|#|1 就是把1换成2(只替换一次) 可使用正则匹配替换"
+                      class="layui-textarea" style="height:81px">{{info.列表内容替换}}</textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">地址规则</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="列表地址规则" lay-verify="required" autocomplete="off"
+                               placeholder="请输入列表地址规则 如:#list ul dd a|href"
+                               class="layui-input" value="{{info.列表地址规则}}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">规则类型</label>
+                    <div class="layui-input-block">
+                        <select name="列表地址规则类型" lay-verify="required">
+                            {% if info.列表地址规则类型 == '1' %}
+                            <option value="0">CSS</option>
+                            <option value="1" selected="selected">正则</option>
+                            <option value="2">[书号]正则</option>
+                            <option value="3">XPATH</option>
+                            {% elif info.列表地址规则类型 == '2' %}
+                            <option value="0">CSS</option>
+                            <option value="1">正则</option>
+                            <option value="2" selected="selected">[书号]正则</option>
+                            <option value="3">XPATH</option>
+                            {% elif info.列表地址规则类型 == '3' %}
+                            <option value="0">CSS</option>
+                            <option value="1">正则</option>
+                            <option value="2">[书号]正则</option>
+                            <option value="3" selected="selected">XPATH</option>
+                            {% else %}
+                            <option value="0" selected="selected">CSS</option>
+                            <option value="1">正则</option>
+                            <option value="2">[书号]正则</option>
+                            <option value="3">XPATH</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">列表地址替换</label>
+                    <div class="layui-input-block">
+            <textarea name="列表地址替换" required lay-verify="title"
+                      placeholder="一行一个替换规则(都是替换为空),|#|分割替换内容 如: 1|#|2 就是把所有1换成2 实例二 1|#|2|#|1 就是把1换成2(只替换一次) 可使用正则匹配替换
+当列表地址获取为‘[书号]正则’时 这里请输入 http://www.biquge.com/[父号]/[书号].html [父号]默认[书号/1000]"
+                      class="layui-textarea" style="height:81px">{{info.列表地址替换}}</textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">标题规则</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="列表标题规则" lay-verify="required" autocomplete="off"
+                               placeholder="请输入列表标题规则 如:#list ul dd a"
+                               class="layui-input" value="{{info.列表标题规则}}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">规则类型</label>
+                    <div class="layui-input-block">
+                        <select name="列表标题规则类型" lay-verify="required">
+                            {% if info.列表标题规则类型 == '1' %}
+                            <option value="0">CSS</option>
+                            <option value="1" selected="selected">正则</option>
+                            <option value="3">XPATH</option>
+                            {% elif info.列表标题规则类型 == '3' %}
+                            <option value="0">CSS</option>
+                            <option value="1">正则</option>
+                            <option value="3" selected="selected">XPATH</option>
+                            {% else %}
+                            <option value="0" selected="selected">CSS</option>
+                            <option value="1">正则</option>
+                            <option value="3">XPATH</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">列表标题替换</label>
+                    <div class="layui-input-block">
+            <textarea name="列表标题替换" required lay-verify="title"
+                      placeholder="一行一个替换规则(都是替换为空),|#|分割替换内容 如: 1|#|2 就是把所有1换成2 实例二 1|#|2|#|1 就是把1换成2(只替换一次) 可使用正则匹配替换"
+                      class="layui-textarea" style="height:81px">{{info.列表标题替换}}</textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">搜索地址</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="搜索地址" lay-verify="title" autocomplete="off"
+                               placeholder="请输入搜索地址 如:http://www.biquge.info/modules/article/search.php?searchkey=[关键词]"
+                               class="layui-input" value="{{info.搜索地址}}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">搜索规则</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="搜索规则" lay-verify="title" autocomplete="off"
+                               placeholder="请输入搜索规则 如:#list ul dd a|href"
+                               class="layui-input" value="{{info.搜索规则}}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">规则类型</label>
+                    <div class="layui-input-block">
+                        <select name="搜索规则类型" lay-verify="required">
+                            {% if info.搜索规则类型 == '1' %}
+                            <option value="0">CSS</option>
+                            <option value="1" selected="selected">正则</option>
+                            <option value="3">XPATH</option>
+                            {% elif info.搜索规则类型 == '3' %}
+                            <option value="0">CSS</option>
+                            <option value="1">正则</option>
+                            <option value="3" selected="selected">XPATH</option>
+                            {% else %}
+                            <option value="0" selected="selected">CSS</option>
+                            <option value="1">正则</option>
+                            <option value="3">XPATH</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">搜索替换</label>
+                    <div class="layui-input-block">
+            <textarea name="搜索替换" required lay-verify="title"
+                      placeholder="一行一个替换规则(都是替换为空),|#|分割替换内容 如: 1|#|2 就是把所有1换成2 实例二 1|#|2|#|1 就是把1换成2(只替换一次) 可使用正则匹配替换"
+                      class="layui-textarea" style="height:81px">{{info.搜索替换}}</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-colla-item">
+            <h2 class="layui-colla-title">信息页设置</h2>
+            <div class="layui-colla-content" id="information">
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">信息页内容替换</label>
+                    <div class="layui-input-block">
+            <textarea name="信息内容替换" required lay-verify="title"
+                      placeholder="一行一个替换规则(都是替换为空),|#|分割替换内容 如: 1|#|2 就是把所有1换成2 实例二 1|#|2|#|1 就是把1换成2(只替换一次) 可使用正则匹配替换"
+                      class="layui-textarea" style="height:81px">{{info.信息内容替换}}</textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">采集方式</label>
+                    <div class="layui-input-block">
+                        <select name="信息采集方式" lay-verify="required">
+                            {% if info.信息采集方式 == '1' %}
+                            <option value="0">默认</option>
+                            <option value="1" selected="selected">浏览器</option>
+                            {% else %}
+                            <option value="0" selected="selected">默认</option>
+                            <option value="1">浏览器</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">标题规则</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="信息标题规则" lay-verify="required" autocomplete="off"
+                               placeholder="请输入信息标题规则 如:meta[property='og:title']|content"
+                               class="layui-input" value="{{info.信息标题规则}}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">规则类型</label>
+                    <div class="layui-input-block">
+                        <select name="信息标题规则类型" lay-verify="required">
+                            {% if info.信息标题规则类型 == '1' %}
+                            <option value="0">CSS</option>
+                            <option value="1" selected="selected">正则</option>
+                            <option value="3">XPATH</option>
+                            {% elif info.信息标题规则类型 == '3' %}
+                            <option value="0">CSS</option>
+                            <option value="1">正则</option>
+                            <option value="3" selected="selected">XPATH</option>
+                            {% else %}
+                            <option value="0" selected="selected">CSS</option>
+                            <option value="1">正则</option>
+                            <option value="3">XPATH</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">标题替换</label>
+                    <div class="layui-input-block">
+            <textarea name="信息标题替换" required lay-verify="title"
+                      placeholder="一行一个替换规则(都是替换为空),|#|分割替换内容 如: 1|#|2 就是把所有1换成2 实例二 1|#|2|#|1 就是把1换成2(只替换一次) 可使用正则匹配替换"
+                      class="layui-textarea" style="height:81px">{{info.信息标题替换}}</textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">作者规则</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="信息作者规则" lay-verify="required" autocomplete="off"
+                               placeholder="请输入信息作者规则 如:meta[property='og:novel:author']|content"
+                               class="layui-input" value="{{info.信息作者规则}}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">规则类型</label>
+                    <div class="layui-input-block">
+                        <select name="信息作者规则类型" lay-verify="required">
+                            {% if info.信息作者规则类型 == '1' %}
+                            <option value="0">CSS</option>
+                            <option value="1" selected="selected">正则</option>
+                            <option value="3">XPATH</option>
+                            {% elif info.信息作者规则类型 == '3' %}
+                            <option value="0">CSS</option>
+                            <option value="1">正则</option>
+                            <option value="3" selected="selected">XPATH</option>
+                            {% else %}
+                            <option value="0" selected="selected">CSS</option>
+                            <option value="1">正则</option>
+                            <option value="3">XPATH</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">作者替换</label>
+                    <div class="layui-input-block">
+            <textarea name="信息作者替换" required lay-verify="title"
+                      placeholder="一行一个替换规则(都是替换为空),|#|分割替换内容 如: 1|#|2 就是把所有1换成2 实例二 1|#|2|#|1 就是把1换成2(只替换一次) 可使用正则匹配替换"
+                      class="layui-textarea" style="height:81px">{{info.信息作者替换}}</textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">封面规则</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="信息封面规则" lay-verify="required" autocomplete="off"
+                               placeholder="请输入信息封面规则 如:meta[property='og:image']|content"
+                               class="layui-input" value="{{info.信息封面规则}}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">规则类型</label>
+                    <div class="layui-input-block">
+                        <select name="信息封面规则类型" lay-verify="required">
+                            {% if info.信息封面规则类型 == '1' %}
+                            <option value="0">CSS</option>
+                            <option value="1" selected="selected">正则</option>
+                            <option value="3">XPATH</option>
+                            {% elif info.信息封面规则类型 == '3' %}
+                            <option value="0">CSS</option>
+                            <option value="1">正则</option>
+                            <option value="3" selected="selected">XPATH</option>
+                            {% else %}
+                            <option value="0" selected="selected">CSS</option>
+                            <option value="1">正则</option>
+                            <option value="3">XPATH</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">封面替换</label>
+                    <div class="layui-input-block">
+            <textarea name="信息封面替换" required lay-verify="title"
+                      placeholder="一行一个替换规则(都是替换为空),|#|分割替换内容 如: 1|#|2 就是把所有1换成2 实例二 1|#|2|#|1 就是把1换成2(只替换一次) 可使用正则匹配替换"
+                      class="layui-textarea" style="height:81px">{{info.信息封面替换}}</textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">大分类规则</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="信息大分类规则" lay-verify="required" autocomplete="off"
+                               placeholder="请输入信息大分类规则 如:meta[property='og:novel:category']|content"
+                               class="layui-input" value="{{info.信息大分类规则}}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">规则类型</label>
+                    <div class="layui-input-block">
+                        <select name="信息大分类规则类型" lay-verify="required">
+                            {% if info.信息大分类规则类型 == '1' %}
+                            <option value="0">CSS</option>
+                            <option value="1" selected="selected">正则</option>
+                            <option value="3">XPATH</option>
+                            {% elif info.信息大分类规则类型 == '3' %}
+                            <option value="0">CSS</option>
+                            <option value="1">正则</option>
+                            <option value="3" selected="selected">XPATH</option>
+                            {% else %}
+                            <option value="0" selected="selected">CSS</option>
+                            <option value="1">正则</option>
+                            <option value="3">XPATH</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">大分类替换</label>
+                    <div class="layui-input-block">
+            <textarea name="信息大分类替换" required lay-verify="title"
+                      placeholder="一行一个替换规则(都是替换为空),|#|分割替换内容 如: 1|#|2 就是把所有1换成2 实例二 1|#|2|#|1 就是把1换成2(只替换一次) 可使用正则匹配替换"
+                      class="layui-textarea" style="height:81px">{{info.信息大分类替换}}</textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">小分类规则</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="信息小分类规则" lay-verify="title" autocomplete="off"
+                               placeholder="请输入信息小分类规则 如:meta[property='og:novel:category']|content"
+                               class="layui-input" value="{{info.信息小分类规则}}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">规则类型</label>
+                    <div class="layui-input-block">
+                        <select name="信息小分类规则类型" lay-verify="required">
+                            {% if info.信息小分类规则类型 == '1' %}
+                            <option value="0">CSS</option>
+                            <option value="1" selected="selected">正则</option>
+                            <option value="3">XPATH</option>
+                            {% elif info.信息小分类规则类型 == '3' %}
+                            <option value="0">CSS</option>
+                            <option value="1">正则</option>
+                            <option value="3" selected="selected">XPATH</option>
+                            {% else %}
+                            <option value="0" selected="selected">CSS</option>
+                            <option value="1">正则</option>
+                            <option value="3">XPATH</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">小分类替换</label>
+                    <div class="layui-input-block">
+            <textarea name="信息小分类替换" required lay-verify="title"
+                      placeholder="一行一个替换规则(都是替换为空),|#|分割替换内容 如: 1|#|2 就是把所有1换成2 实例二 1|#|2|#|1 就是把1换成2(只替换一次) 可使用正则匹配替换"
+                      class="layui-textarea" style="height:81px">{{info.信息小分类替换}}</textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">状态规则</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="信息状态规则" lay-verify="required" autocomplete="off"
+                               placeholder="请输入信息状态规则 如:meta[property='og:novel:status']|content"
+                               class="layui-input" value="{{info.信息状态规则}}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">状态类型</label>
+                    <div class="layui-input-block">
+                        <select name="信息状态规则类型" lay-verify="required">
+                            {% if info.信息状态规则类型 == '1' %}
+                            <option value="0">CSS</option>
+                            <option value="1" selected="selected">正则</option>
+                            <option value="3">XPATH</option>
+                            {% elif info.信息状态规则类型 == '3' %}
+                            <option value="0">CSS</option>
+                            <option value="1">正则</option>
+                            <option value="3" selected="selected">XPATH</option>
+                            {% else %}
+                            <option value="0" selected="selected">CSS</option>
+                            <option value="1">正则</option>
+                            <option value="3">XPATH</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">状态替换</label>
+                    <div class="layui-input-block">
+            <textarea name="信息状态替换" required lay-verify="title"
+                      placeholder="一行一个替换规则(都是替换为空),|#|分割替换内容 如: 1|#|2 就是把所有1换成2 实例二 1|#|2|#|1 就是把1换成2(只替换一次) 可使用正则匹配替换"
+                      class="layui-textarea" style="height:81px">{{info.信息状态替换}}</textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">关键词规则</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="信息关键词规则" lay-verify="title" autocomplete="off"
+                               placeholder="请输入信息关键词规则 如:meta[property='og:novel:keywords']|content"
+                               class="layui-input" value="{{info.信息关键词规则}}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">规则类型</label>
+                    <div class="layui-input-block">
+                        <select name="信息关键词规则类型" lay-verify="required">
+                            {% if info.信息关键词规则类型 == '1' %}
+                            <option value="0">CSS</option>
+                            <option value="1" selected="selected">正则</option>
+                            <option value="3">XPATH</option>
+                            {% elif info.信息关键词规则类型 == '3' %}
+                            <option value="0">CSS</option>
+                            <option value="1">正则</option>
+                            <option value="3" selected="selected">XPATH</option>
+                            {% else %}
+                            <option value="0" selected="selected">CSS</option>
+                            <option value="1">正则</option>
+                            <option value="3">XPATH</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">关键词替换</label>
+                    <div class="layui-input-block">
+            <textarea name="信息关键词替换" required lay-verify="title"
+                      placeholder="一行一个替换规则(都是替换为空),|#|分割替换内容 如: 1|#|2 就是把所有1换成2 实例二 1|#|2|#|1 就是把1换成2(只替换一次) 可使用正则匹配替换"
+                      class="layui-textarea" style="height:81px">{{info.信息关键词替换}}</textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">简介规则</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="信息简介规则" lay-verify="required" autocomplete="off"
+                               placeholder="请输入信息简介规则 如:meta[property='og:description']|content"
+                               class="layui-input" value="{{info.信息简介规则}}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">规则类型</label>
+                    <div class="layui-input-block">
+                        <select name="信息简介规则类型" lay-verify="required">
+                            {% if info.信息简介规则类型 == '1' %}
+                            <option value="0">CSS</option>
+                            <option value="1" selected="selected">正则</option>
+                            <option value="3">XPATH</option>
+                            {% elif info.信息简介规则类型 == '3' %}
+                            <option value="0">CSS</option>
+                            <option value="1">正则</option>
+                            <option value="3" selected="selected">XPATH</option>
+                            {% else %}
+                            <option value="0" selected="selected">CSS</option>
+                            <option value="1">正则</option>
+                            <option value="3">XPATH</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">简介替换</label>
+                    <div class="layui-input-block">
+            <textarea name="信息简介替换" required lay-verify="title"
+                      placeholder="一行一个替换规则(都是替换为空),|#|分割替换内容 如: 1|#|2 就是把所有1换成2 实例二 1|#|2|#|1 就是把1换成2(只替换一次) 可使用正则匹配替换"
+                      class="layui-textarea" style="height:81px">{{info.信息简介替换}}</textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">频道规则</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="信息频道规则" lay-verify="title" autocomplete="off"
+                               placeholder="请输入信息频道规则 如:meta[property='og:pindao']|content"
+                               class="layui-input" value="{{info.信息频道规则}}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">规则类型</label>
+                    <div class="layui-input-block">
+                        <select name="信息频道规则类型" lay-verify="required">
+                            {% if info.信息频道规则类型 == '1' %}
+                            <option value="0">CSS</option>
+                            <option value="1" selected="selected">正则</option>
+                            <option value="3">XPATH</option>
+                            {% elif info.信息频道规则类型 == '3' %}
+                            <option value="0">CSS</option>
+                            <option value="1">正则</option>
+                            <option value="3" selected="selected">XPATH</option>
+                            {% else %}
+                            <option value="0" selected="selected">CSS</option>
+                            <option value="1">正则</option>
+                            <option value="3">XPATH</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">频道替换</label>
+                    <div class="layui-input-block">
+            <textarea name="信息频道替换" required lay-verify="title"
+                      placeholder="一行一个替换规则(都是替换为空),|#|分割替换内容 如: 1|#|2 就是把所有1换成2 实例二 1|#|2|#|1 就是把1换成2(只替换一次) 可使用正则匹配替换"
+                      class="layui-textarea" style="height:81px">{{info.信息频道替换}}</textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">地址规则</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="目录地址规则" lay-verify="title" autocomplete="off"
+                               placeholder="请输入目录地址规则 如:#linkclick|href ‘[书号]拼接’时 这里请输入 http://www.biquge.com/[父号]/[书号].html [父号]默认[书号/1000]"
+                               class="layui-input" value="{{info.目录地址规则}}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">规则类型</label>
+                    <div class="layui-input-block">
+                        <select name="目录地址规则类型" lay-verify="required">
+                            {% if info.目录地址规则类型 == '1' %}
+                            <option value="0">CSS</option>
+                            <option value="1" selected="selected">正则</option>
+                            <option value="2">[书号]拼接</option>
+                            <option value="3">XPATH</option>
+                            {% elif info.目录地址规则类型 == '2' %}
+                            <option value="0">CSS</option>
+                            <option value="1">正则</option>
+                            <option value="2" selected="selected">[书号]拼接</option>
+                            <option value="3">XPATH</option>
+                            {% elif info.目录地址规则类型 == '3' %}
+                            <option value="0">CSS</option>
+                            <option value="1">正则</option>
+                            <option value="2">[书号]拼接</option>
+                            <option value="3" selected="selected">XPATH</option>
+                            {% else %}
+                            <option value="0" selected="selected">CSS</option>
+                            <option value="1">正则</option>
+                            <option value="2">[书号]拼接</option>
+                            <option value="3">XPATH</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">地址替换</label>
+                    <div class="layui-input-block">
+            <textarea name="目录地址替换" required lay-verify="title"
+                      placeholder="一行一个替换规则(都是替换为空),|#|分割替换内容 如: 1|#|2 就是把所有1换成2 实例二 1|#|2|#|1 就是把1换成2(只替换一次) 可使用正则匹配替换"
+                      class="layui-textarea" style="height:81px">{{info.目录地址替换}}</textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block" style="margin-left:20px;">
+                        <button type="button" class="layui-btn" id="addkey">添加</button>
+                    </div>
+                </div>
+                {% for item in info.自定义集合 %}
+                <div class="layui-form-item" id="w_{{item.序号}}">
+                    <label class="layui-form-label">未知规则</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="未知规则{{item.序号}}" lay-verify="title" autocomplete="off"
+                               placeholder="请输入规则"
+                               class="layui-input" value="{{item.规则}}">
+                    </div>
+                </div>
+                <div class="layui-form-item" id="l_{{item.序号}}">
+                    <label class="layui-form-label">规则类型</label>
+                    <div class="layui-input-block">
+                        <select name="未知规则类型{{item.序号}}" lay-verify="required">
+                            {% if item.类型 == '1'%}
+                            <option value="0">CSS</option>
+                            <option value="1" selected="selected">正则</option>
+                            <option value="3">XPATH</option>
+                            {% elif info.类型 == '3' %}
+                            <option value="0">CSS</option>
+                            <option value="1">正则</option>
+                            <option value="3" selected="selected">XPATH</option>
+                            {% else %}
+                            <option value="0" selected="selected">CSS</option>
+                            <option value="1">正则</option>
+                            <option value="3">XPATH</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text" id="t_{{item.序号}}">
+                    <label class="layui-form-label">规则替换</label>
+                    <div class="layui-input-block">
+                        <textarea name="未知规则替换{{item.序号}}" required lay-verify="title"
+                                  placeholder="一行一个替换规则(都是替换为空),|#|分割替换内容 如: 1|#|2 就是把所有1换成2 实例二 1|#|2|#|1 就是把1换成2(只替换一次) 可使用正则匹配替换"
+                                  class="layui-textarea" style="height:81px">{{item.替换}}</textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item" id="s_{{item.序号}}">
+                    <label class="layui-form-label">保存字段</label>
+                    <div class="layui-input-block">
+                        <select name="保存字段{{item.序号}}" lay-verify="required">
+                            <option value="">请选择 “字段”</option>
+                            {% for it in 字段集合 %}
+                            {% if item.字段 == it%}
+                            <option value="{{it}}" selected="selected">{{it}}</option>
+                            {% else %}
+                            <option value="{{it}}">{{it}}</option>
+                            {% endif %}
+                            {% endfor%}
+                        </select>
+                    </div>
+                </div>
+                <button type="button" id="d_{{item.序号}}" class="layui-btn" onclick="del('{{item.序号}}')">删除</button>
+                {% endfor%}
+            </div>
+        </div>
+        <div class="layui-colla-item">
+            <h2 class="layui-colla-title">目录页设置</h2>
+            <div class="layui-colla-content">
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">目录页内容替换</label>
+                    <div class="layui-input-block">
+            <textarea name="目录内容替换" required lay-verify="title"
+                      placeholder="一行一个替换规则(都是替换为空),|#|分割替换内容 如: 1|#|2 就是把所有1换成2 实例二 1|#|2|#|1 就是把1换成2(只替换一次) 可使用正则匹配替换"
+                      class="layui-textarea" style="height:81px">{{info.目录内容替换}}</textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">采集方式</label>
+                    <div class="layui-input-block">
+                        <select name="目录采集方式" lay-verify="required">
+                            {% if info.目录采集方式 == '1' %}
+                            <option value="0">默认</option>
+                            <option value="1" selected="selected">浏览器</option>
+                            {% else %}
+                            <option value="0" selected="selected">默认</option>
+                            <option value="1">浏览器</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">目录分页</label>
+                    <div class="layui-input-block">
+                        <select name="目录分页状态" lay-verify="required">
+                            {% if info.目录分页状态 == '1' %}
+                            <option value="0">默认不分页</option>
+                            <option value="1" selected="selected">分全部页</option>
+                            <option value="2">分下一页</option>
+                            {% elif info.目录分页状态 == '2' %}
+                            <option value="0">默认不分页</option>
+                            <option value="1">分全部页</option>
+                            <option value="2" selected="selected">分下一页</option>
+                            {% else %}
+                            <option value="0" selected="selected">默认不分页</option>
+                            <option value="1">分全部页</option>
+                            <option value="2">分下一页</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">分页规则</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="目录分页规则" lay-verify="title" autocomplete="off"
+                               placeholder="请输入目录分页规则 如:#nextpage|href"
+                               class="layui-input" value="{{info.目录分页规则}}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">规则类型</label>
+                    <div class="layui-input-block">
+                        <select name="目录分页规则类型" lay-verify="required">
+                            {% if info.目录分页规则类型 == '1' %}
+                            <option value="0">CSS</option>
+                            <option value="1" selected="selected">正则</option>
+                            {% else %}
+                            <option value="0" selected="selected">CSS</option>
+                            <option value="1">正则</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">排序类型</label>
+                    <div class="layui-input-block">
+                        <select name="章节排序类型" lay-verify="required">
+                            {% if info.章节排序类型 == '1' %}
+                            <option value="0">默认不排序</option>
+                            <option value="1" selected="selected">章节ID正序</option>
+                            <option value="2">章节ID倒序</option>
+                            {% elif info.章节排序类型 == '2' %}
+                            <option value="0">默认不排序</option>
+                            <option value="1">章节ID正序</option>
+                            <option value="2" selected="selected">章节ID倒序</option>
+                            {% else %}
+                            <option value="0" selected="selected">默认不排序</option>
+                            <option value="1">章节ID正序</option>
+                            <option value="2">章节ID倒序</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">倒序处理</label>
+                    <div class="layui-input-block">
+                        <input type="number" min="0" max="1000000" name="倒序处理" lay-verify="required" autocomplete="off"
+                               placeholder="目录倒序N个处理一次"
+                               class="layui-input" value="{{info.倒序处理}}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">地址规则</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="章节地址规则" lay-verify="required" autocomplete="off"
+                               placeholder="请输入章节地址规则 如:#list dd a|href"
+                               class="layui-input" value="{{info.章节地址规则}}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">规则类型</label>
+                    <div class="layui-input-block">
+                        <select name="章节地址规则类型" lay-verify="required">
+                            {% if info.章节地址规则类型 == '1' %}
+                            <option value="0">CSS</option>
+                            <option value="1" selected="selected">正则</option>
+                            <option value="2">[章节ID]规则</option>
+                            <option value="3">XPATH</option>
+                            {% elif info.章节地址规则类型 == '2' %}
+                            <option value="0">CSS</option>
+                            <option value="1">正则</option>
+                            <option value="2" selected="selected">[章节ID]规则</option>
+                            <option value="3">XPATH</option>
+                            {% elif info.章节地址规则类型 == '3' %}
+                            <option value="0">CSS</option>
+                            <option value="1">正则</option>
+                            <option value="2">[章节ID]规则</option>
+                            <option value="3" selected="selected">XPATH</option>
+                            {% else %}
+                            <option value="0" selected="selected">CSS</option>
+                            <option value="1">正则</option>
+                            <option value="2">[章节ID]规则</option>
+                            <option value="3">XPATH</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">地址替换</label>
+                    <div class="layui-input-block">
+            <textarea name="章节地址替换" required lay-verify="title"
+                      placeholder="一行一个替换规则(都是替换为空),|#|分割替换内容 如: 1|#|2 就是把所有1换成2 实例二 1|#|2|#|1 就是把1换成2(只替换一次) 可使用正则匹配替换"
+                      class="layui-textarea" style="height:81px">{{info.章节地址替换}}</textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">标题规则</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="章节标题规则" lay-verify="required" autocomplete="off"
+                               placeholder="请输入章节标题规则 如:#list dd a"
+                               class="layui-input" value="{{info.章节标题规则}}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">规则类型</label>
+                    <div class="layui-input-block">
+                        <select name="章节标题规则类型" lay-verify="required">
+                            {% if info.章节标题规则类型 == '1' %}
+                            <option value="0">CSS</option>
+                            <option value="1" selected="selected">正则</option>
+                            <option value="3">XPATH</option>
+                            {% elif info.章节标题规则类型 == '3' %}
+                            <option value="0">CSS</option>
+                            <option value="1">正则</option>
+                            <option value="3" selected="selected">XPATH</option>
+                            {% else %}
+                            <option value="0" selected="selected">CSS</option>
+                            <option value="1">正则</option>
+                            <option value="3">XPATH</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">标题替换</label>
+                    <div class="layui-input-block">
+            <textarea name="章节标题替换" required lay-verify="title"
+                      placeholder="一行一个替换规则(都是替换为空),|#|分割替换内容 如: 1|#|2 就是把所有1换成2 实例二 1|#|2|#|1 就是把1换成2(只替换一次) 可使用正则匹配替换"
+                      class="layui-textarea" style="height:81px">{{info.章节标题替换}}</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-colla-item">
+            <h2 class="layui-colla-title">内容页设置</h2>
+            <div class="layui-colla-content">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">采集方式</label>
+                    <div class="layui-input-block">
+                        <select name="内容采集方式" lay-verify="required">
+                            {% if info.内容采集方式 == '1' %}
+                            <option value="0">默认</option>
+                            <option value="1" selected="selected">浏览器</option>
+                            {% else %}
+                            <option value="0" selected="selected">默认</option>
+                            <option value="1">浏览器</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">内容类型</label>
+                    <div class="layui-input-block">
+                        <select name="章节内容类型" lay-verify="required">
+                            {% if info.章节内容类型 == '1' %}
+                            <option value="0">不包含图片</option>
+                            <option value="1" selected="selected">包含图片</option>
+                            {% else %}
+                            <option value="0" selected="selected">不包含图片</option>
+                            <option value="1">包含图片</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">内容规则</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="内容规则" lay-verify="required" autocomplete="off"
+                               placeholder="请输入内容规则 如:#txt"
+                               class="layui-input" value="{{info.内容规则}}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">规则类型</label>
+                    <div class="layui-input-block">
+                        <select name="内容规则类型" lay-verify="required">
+                            {% if info.内容规则类型 == '1' %}
+                            <option value="0">Html</option>
+                            <option value="00">Text</option>
+                            <option value="1" selected="selected">正则</option>
+                            <option value="3">XPATH</option>
+                            {% elif info.内容规则类型 == '00' %}
+                            <option value="0">Html</option>
+                            <option value="00" selected="selected">Text</option>
+                            <option value="1">正则</option>
+                            <option value="3">XPATH</option>
+                            {% elif info.内容规则类型 == '3' %}
+                            <option value="0">Html</option>
+                            <option value="00">Text</option>
+                            <option value="1">正则</option>
+                            <option value="3" selected="selected">XPATH</option>
+                            {% else %}
+                            <option value="0" selected="selected">Html</option>
+                            <option value="00">Text</option>
+                            <option value="1">正则</option>
+                            <option value="3">XPATH</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">内容替换</label>
+                    <div class="layui-input-block">
+            <textarea name="内容替换" required lay-verify="title"
+                      placeholder="一行一个替换规则(都是替换为空),|#|分割替换内容 如: 1|#|2 就是把所有1换成2 实例二 1|#|2|#|1 就是把1换成2(只替换一次) 可使用正则匹配替换"
+                      class="layui-textarea" style="height:81px">{{info.内容替换}}</textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">分页规则</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="分页规则" lay-verify="title" autocomplete="off"
+                               placeholder="请输入分页规则 如:下一页 不分页就空着"
+                               class="layui-input" value="{{info.分页规则}}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">规则类型</label>
+                    <div class="layui-input-block">
+                        <select name="分页规则类型" lay-verify="required">
+                            {% if info.分页规则类型 == '1' %}
+                            <option value="0">文本</option>
+                            <option value="1" selected="selected">正则</option>
+                            {% else %}
+                            <option value="0" selected="selected">文本</option>
+                            <option value="1">正则</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">地址规则</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="分页地址规则" lay-verify="title" autocomplete="off"
+                               placeholder="请输入分页地址规则 如:#nextpage|href"
+                               class="layui-input" value="{{info.分页地址规则}}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">规则类型</label>
+                    <div class="layui-input-block">
+                        <select name="分页地址规则类型" lay-verify="required">
+                            {% if info.分页地址规则类型 == '1' %}
+                            <option value="0">CSS</option>
+                            <option value="1" selected="selected">正则</option>
+                            {% else %}
+                            <option value="0" selected="selected">CSS</option>
+                            <option value="1">正则</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">下一章地址</label>
+                    <div class="layui-input-block">
+                        <select name="下一章地址获取状态" lay-verify="required">
+                            <option value="">请选择 是否在内容页获取下一章地址</option>
+                            {% if info.下一章地址获取状态 == '1' %}
+                            <option value="0">否</option>
+                            <option value="1" selected="selected">是</option>
+                            {% else %}
+                            <option value="0" selected="selected">否</option>
+                            <option value="1">是</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">地址规则</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="下一章地址规则" lay-verify="title" autocomplete="off"
+                               placeholder="请输入下一章地址规则 如:#pagenext|href"
+                               class="layui-input" value="{{info.下一章地址规则}}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">规则类型</label>
+                    <div class="layui-input-block">
+                        <select name="下一章地址规则类型" lay-verify="required">
+                            {% if info.下一章地址规则类型 == '1' %}
+                            <option value="0">CSS</option>
+                            <option value="1" selected="selected">正则</option>
+                            {% else %}
+                            <option value="0" selected="selected">CSS</option>
+                            <option value="1">正则</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">标题规则</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="下一章标题规则" lay-verify="title" autocomplete="off"
+                               placeholder="请输入下一章标题规则 如:h1"
+                               class="layui-input" value="{{info.下一章标题规则}}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">规则类型</label>
+                    <div class="layui-input-block">
+                        <select name="下一章标题规则类型" lay-verify="required">
+                            {% if info.下一章标题规则类型 == '1' %}
+                            <option value="0">CSS</option>
+                            <option value="1" selected="selected">正则</option>
+                            {% else %}
+                            <option value="0" selected="selected">CSS</option>
+                            <option value="1">正则</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item" style="margin-top: 50px;">
+            <div class="layui-input-block">
+                <button type="submit" class="layui-btn" lay-submit="" lay-filter="save">提 交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重 置</button>
+            </div>
+        </div>
+    </div>
+</form>
+<script>
+    layui.use(['form', 'jquery'], function () {
+        var $ = layui.jquery, form = layui.form;
+        //监听提交
+        form.on('submit(save)', function (data) {
+            var loading = layer.load(0, {shade: false});
+            $.ajax({
+                url: '/addrule',
+                type: 'POST',
+                data: data.field,
+                success: function (data) {
+                    layer.close(loading);
+                    if (data == "保存成功！") {
+                        window.location.href = '/rulelist';
+                    } else {
+                        layer.alert(data);
+                    }
+                    layer.alert(data);
+                }
+            });
+            return false;
+        });
+        var kid = {{info.自定义最大顺序}};
+        var karr = $("#wz").val().split('|');
+        var zd = [];
+        {% for item in 字段集合 %}
+        zd.push('{{item}}');
+        {% endfor %}
+        Array.prototype.remove = function (val) {
+            for (i = 0; i < this.length; i++) {
+                if (this[i] == val) {
+                    this.splice(i, 1);
+                    $("#wz").val(karr.join('|'));
+                }
+            }
+        };
+        $('#addkey').on('click', function (data) {
+            kid = kid + 1;
+            var html = '';
+            html += '<div class="layui-form-item" id="w_' + kid + '">';
+            html += '<label class="layui-form-label">未知规则</label>';
+            html += '<div class="layui-input-block">';
+            html += '<input type="text" name="未知规则' + kid + '" lay-verify="title" autocomplete="off" placeholder="请输入规则" class="layui-input" value="">';
+            html += '</div>';
+            html += '</div>';
+            html += '<div class="layui-form-item" id="l_' + kid + '">';
+            html += '<label class="layui-form-label">规则类型</label>';
+            html += '<div class="layui-input-block">';
+            html += '<select name="未知规则类型' + kid + '" lay-verify="required">';
+            html += '<option value="0" selected="selected">CSS</option>';
+            html += '<option value="1">正则</option>';
+            html += '</select>';
+            html += '</div>';
+            html += '</div>';
+            html += '<div class="layui-form-item layui-form-text" id="t_' + kid + '">';
+            html += '<label class="layui-form-label">规则替换</label>';
+            html += '<div class="layui-input-block">';
+            html += '<textarea name="未知规则替换' + kid + '" required lay-verify="title" placeholder="一行一个替换规则(都是替换为空),|#|分割替换内容 如: 1|#|2 就是把所有1换成2 实例二 1|#|2|#|1 就是把1换成2(只替换一次) 可使用正则匹配替换" class="layui-textarea" style="height:81px">{{info.信息作者替换}}</textarea>';
+            html += '</div>';
+            html += '</div>';
+            html += '<div class="layui-form-item" id="s_' + kid + '">';
+            html += '<label class="layui-form-label">保存字段</label>';
+            html += '<div class="layui-input-block">';
+            html += '<select name="保存字段' + kid + '" lay-verify="required">';
+            html += '<option value="" selected="selected">请选择 “字段”</option>';
+            for (i = 0; i < zd.length; i++) {
+                html += '<option value="' + zd[0] + '">' + zd[i] + '</option>';
+            }
+            html += '</select>';
+            html += '</div>';
+            html += '</div>';
+            html += '<button type="button" id="d_' + kid + '" class="layui-btn" style="margin-left:20px;" onclick="del(\'' + kid + '\')">删除</button>';
+            $('#information').append(html);
+            form.render();
+            karr.push(kid);
+            $("#wz").val(karr.join('|'));
+        });
+        del = function (id) {
+            $('#w_' + id).remove();
+            $('#l_' + id).remove();
+            $('#t_' + id).remove();
+            $('#s_' + id).remove();
+            $('#d_' + id).remove();
+            karr.remove(id);
+        }
+        //导航
+        $(document).ready(function () {
+            var url = GetUrlRelativePath();
+            var patt1 = new RegExp(url);
+            //$(".layui-this").removeClass();
+            $(document.body).find('a').each(function (i, obj) {
+                var str = $(obj).attr('href');
+                if (patt1.test(str)) {
+                    $(obj).parent().addClass("layui-this");
+                    $(obj).parent().parent().parent().addClass(" layui-nav-itemed");
+                }
+            });
+        });
+    });
+
+
+</script>
+{% endblock %}

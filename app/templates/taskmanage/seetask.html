@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+任务ID
+规则ID
+任务名称
+任务类型
+任务间隔时间
+任务状态
+代理类型
+代理信息
+内容
+标识修复
+字数修复
+采集间隔
+重试次数
+重试间隔
+最少字数
+对比方式
+人工任务状态
+系统任务状态
+运行时间
+起始ID
+结束ID
+顺序
+<script>
+    layui.use(['form','jquery'], function(){
+        var $=layui.jquery,form = layui.form;
+        //导航
+        $(document).ready(function() {
+            var url = GetUrlRelativePath();
+            var patt1 = new RegExp(url);
+            //$(".layui-this").removeClass();
+            $(document.body).find('a').each(function(i, obj) {
+                var str = $(obj).attr('href');
+                if (patt1.test(str)) {
+                    $(obj).parent().addClass("layui-this");
+                    $(obj).parent().parent().parent().addClass(" layui-nav-itemed");
+                }
+            });
+        });
+    });
+
+</script>
+{% endblock %}

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h2>网站通过谷歌控制台注入jquery</h2>
+    var scr = document.createElement("script");<br>
+    scr.src = "https://code.jquery.com/jquery-2.2.0.min.js";<br>
+    document.body.appendChild(scr);
+    <h2>常用小说列表获取</h2>
+    笔趣阁模板1:(首页)<br>
+            地址: #newscontent .l ul li .s2 a|href<br>
+            标题: #newscontent .l ul li .s2 a<br>
+    笔趣阁模板2:(首页)<br>
+            地址: .layout.layout2.layout-col2.fl ul li .s2 a|href<br>
+            标题: .layout.layout2.layout-col2.fl ul li .s2 a<br>
+    笔趣阁模板3:(首页)<br>
+            地址: .l.bd ul li .s2 a|href<br>
+            标题: .l.bd ul li .s2 a<br>
+    铅笔小说模板:(首页)<br>
+            地址: .update_list ul li .r_spanone a|href<br>
+            标题: .update_list ul li .r_spanone a<br>
+    棉花糖小说模板:(首页)<br>
+            地址: .last_update ul li strong a|href<br>
+            标题: .last_update ul li strong a<br>
+    棉花糖小说模板:(更新页)<br>
+            地址: #articlelist ul:eq(1) li .l2 a|href<br>
+            标题: .update_list ul:eq(1) li .l2 a<br>
+    <h2>常用小说信息获取</h2>
+    标题: meta[property='og:title']|content、meta[property='og:novel:book_name']|content、h1<br>
+    作者: meta[property='og:novel:author']|content<br>
+    分类: meta[property='og:novel:category']|content<br>
+    简介: meta[property='og:description']|content、#intro<br>
+    封面: meta[property='og:image']|content<br>
+    状态: meta[property='og:novel:status']|content<br>
+    <h2>常用小说章节列表获取</h2>
+    方式一<br>
+    标题: .listmain dd:nth-child(n+14) a|href<br>
+    地址: .listmain dd:nth-child(n+14) a<br>
+    方式二<br>
+    标题: #list dd:nth-child(n+12) a|href<br>
+    地址: #list dd:nth-child(n+12) a<br>
+    方式三<br>
+    标题: #list dd a|href<br>
+    地址: #list dd a<br>
+    <h2>常用小说章节获取</h2>
+    #txt、#content、.content<br>
+    <h2>常用CSS选择器(可组合使用)</h2>
+    :nth-child(n+1) 例: p:nth-child(n+2)	选择属于其父元素的第二个子元素到第N个 p元素。<br>
+    :nth-last-child(n)例: p:nth-last-child(n+2)	选择属于其父元素的倒数第二个子元素到倒数第N个 p元素。<br>
+    :eq(indx) 选取索引等于index的元素 例: p:eq(1) 选择第二个p 元素
+</body>
+</html>

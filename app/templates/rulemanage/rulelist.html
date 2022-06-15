@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+{% block content %}
+<table class="layui-hide" id="rule" lay-filter="rule"></table>
+<script type="text/html" id="toolbarRule">
+  <div class="layui-btn-container">
+    <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
+    <button class="layui-btn layui-btn-sm" lay-event="import">导入</button>
+    <button class="layui-btn layui-btn-sm" lay-event="addtask">添加任务</button>
+    <button class="layui-btn layui-btn-sm" lay-event="synchRule">同步规则</button>
+  </div>
+</script>
+<script type="text/html" id="barRule">
+  <a class="layui-btn layui-btn-primary layui-btn-xs layui-btn-radius" lay-event="detail">&nbsp;测 试&nbsp;</a>
+  <a class="layui-btn layui-btn-xs layui-btn-radius" lay-event="edit">&nbsp;编 辑&nbsp;</a>
+  <a class="layui-btn layui-btn-xs layui-bg-blue layui-btn-radius" lay-event="emprot">&nbsp;导 出&nbsp;</a>
+  <a class="layui-btn layui-btn-danger layui-btn-xs layui-btn-radius" lay-event="del">&nbsp;删 除&nbsp;</a>
+</script>
+<script>
+    function formatDate(timeStamp) {
+        timeStamp=`${timeStamp}000`;   //如果后台传的timeStamp为10位数，则需要在后面加三个0.
+        timeStamp=Number(timeStamp);
+        let year = new Date(timeStamp).getFullYear();
+        let month =new Date(timeStamp).getMonth() + 1 < 10? "0" + (new Date(timeStamp).getMonth() + 1): new Date(timeStamp).getMonth() + 1;
+        let date =new Date(timeStamp).getDate() < 10? "0" + new Date(timeStamp).getDate(): new Date(timeStamp).getDate();
+        let hh =new Date(timeStamp).getHours() < 10? "0" + new Date(timeStamp).getHours(): new Date(timeStamp).getHours();
+        let mm =new Date(timeStamp).getMinutes() < 10? "0" + new Date(timeStamp).getMinutes(): new Date(timeStamp).getMinutes();
+        let ss=new Date(timeStamp).getSeconds() < 10? "0" + new Date(timeStamp).getSeconds(): new Date(timeStamp).getSeconds();
+        let nowTime = year + "-" + month + "-" + date +" "+" "+hh+":"+mm +":"+ss;
+         return nowTime;
+    }
+    layui.use(['form','jquery','table'], function(){
+        var $=layui.jquery,form = layui.form,table = layui.table;
+        //导航
+          table.render({
+            elem: '#rule'
+            ,url:'/getrulelist'
+            ,toolbar: '#toolbarRule'
+            ,defaultToolbar:'#toolbarRule'
+            ,page: false
+            ,cols: [[
+              {fixed: 'left',width:280, title: '操作', align:'center', toolbar: '#barRule'}
+              ,{field:'规则ID', width:160, align:'center', title: '规则ID', sort: true}
+              ,{field:'规则名称', minwidth:210, align:'center', title: '规则名称'}
+            ]]
+          });
+          //头工具栏事件
+          table.on('toolbar(rule)', function(obj){
+            switch(obj.event){
+              case 'add':
+                location.href = '/rule?type=add';
+              break;
+              case 'import':
+                location.href = '/import';
+              break;
+              case 'addtask':
+                location.href = '/task?type=add';
+                break;
+              case 'synchRule':
+                var loading = layer.load(0, {shade: false,shade:0.5,icon:1});
+                 $.ajax({
+                        url: '/synchRule',
+                        success: function (data) {
+                            layer.close(loading);
+                            if(data=="同步成功！"){
+                                window.location.reload();
+                            }
+                            else{
+                                layer.alert(data);
+                            }
+                        }
+                });
+              break;
+            };
+          });
+          table.on('tool(rule)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'detail'){
+                layer.msg('规则测试。。。', {
+                  btn: ['PC测试', 'M测试', '取消']
+                  ,btn1: function(){
+                    layer.open({
+                      type: 2 //此处以iframe举例
+                      ,title: data.规则名称
+                      ,area: ['800px', '600px']
+                      ,shade: 0
+                      ,maxmin: true
+                      ,offset: [ //为了演示，随机坐标
+                        ($(window).height()-600)/2
+                        ,($(window).width()-800)/2
+                      ]
+                      ,content: '/test?ua=pc&ruleid=' + data.规则ID
+                      ,btn: []
+                      ,zIndex: layer.zIndex //重点1
+                      ,success: function(layero){
+                        layer.setTop(layero); //重点2
+                      }
+                    });
+                  }
+                  ,btn2: function(){
+                    layer.open({
+                      type: 2 //此处以iframe举例
+                      ,title: data.规则名称
+                      ,area: ['800px', '600px']
+                      ,shade: 0
+                      ,maxmin: true
+                      ,offset: [ //为了演示，随机坐标
+                        ($(window).height()-600)/2
+                        ,($(window).width()-800)/2
+                      ]
+                      ,content: '/test?ua=m&ruleid=' + data.规则ID
+                      ,btn: []
+                      ,zIndex: layer.zIndex //重点1
+                      ,success: function(layero){
+                        layer.setTop(layero); //重点2
+                      }
+                    });
+                  }
+                  ,btn3: function(){
+                    layer.closeAll();
+                  }
+                });
+
+            } else if(obj.event === 'del'){
+              layer.confirm('真的删除行么', function(index){
+                $.ajax({
+                        url: '/delrule?ruleid=' + data.规则ID,
+                        success: function (data) {
+                            if(data=="删除成功！"){
+                                window.location.reload();
+                            }
+                            else{
+                                layer.alert(data);
+                            }
+                        }
+                });
+                layer.close(index);
+              });
+            } else if(obj.event === 'edit'){
+              location.href = '/rule?type=up&ruleid=' + data.规则ID;
+            } else if(obj.event === 'emprot'){
+              location.href = '/emprot?ruleid=' + data.规则ID;
+            }
+          });
+        $(document).ready(function() {
+            var url = GetUrlRelativePath();
+            var patt1 = new RegExp(url);
+            //$(".layui-this").removeClass();
+            $(document.body).find('a').each(function(i, obj) {
+                var str = $(obj).attr('href');
+                if (patt1.test(str)) {
+                    $(obj).parent().addClass("layui-this");
+                    $(obj).parent().parent().parent().addClass(" layui-nav-itemed");
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

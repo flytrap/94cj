@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="layui-form">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">日期范围</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" id="test6" placeholder="-">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button type="button" class="layui-btn" onclick="gc()">清理</button>
+        </div>
+    </div>
+</div>
+<table class="layui-hide" id="log"></table>
+<script>
+    layui.use(['form', 'jquery', 'table', 'laydate'], function () {
+        var $ = layui.jquery, form = layui.form, table = layui.table, laydate = layui.laydate;
+        laydate.render({
+            elem: '#test6'
+            , range: true
+        });
+        //导航
+        table.render({
+            elem: '#log'
+            , url: '/getloglist'
+            , page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+                layout: ['count', 'prev', 'page', 'next', 'skip'] //自定义分页布局'limit'
+                , curr: 1 //设定初始在第 5 页
+                , groups: 1 //只显示 1 个连续页码
+                , first: false //不显示首页
+                , last: false //不显示尾页
+                , limit: 30
+                , limits: [30]
+            }
+            , cols: [[
+                {field: '错误ID', width: 100, align: 'center', title: '错误ID'}
+                , {field: '小说ID', width: 100, align: 'center', title: '小说ID', hide: true}
+                , {field: '标题', width: 100, align: 'center', title: '小说名称'}
+                , {field: '章节ID', width: 100, align: 'center', title: '章节ID', hide: true}
+                , {field: '章节名称', width: 100, align: 'center', title: '章节名称'}
+                , {field: '地址', width: 100, align: 'center', title: '地址', hide: true}
+                , {field: '规则ID', width: 100, align: 'center', title: '规则ID', hide: true}
+                , {field: '错误类型', width: 210, align: 'center', title: '问题类型'}
+                , {field: '错误时间', width: 160, align: 'center', title: '发生时间'}
+                , {field: '错误信息', minwidth: 120, align: 'center', title: '问题原因'}
+            ]]
+        });
+        gc = function () {
+            var t = $("#test6").val();
+            if (t == '') {
+                layer.alert("请选择清理日志的时间范围！");
+                return false;
+            }
+            var arr = t.split(' - ');
+            var start = arr[0];
+            var end = arr[1];
+            var loading = layer.load(0, {shade: false});
+            $.ajax({
+                url: '/dellog?start=' + start + '&end=' + end,
+                success: function (data) {
+                    layer.close(loading);
+                    if (data == "删除成功！") {
+                        window.location.reload();
+                    } else {
+                        layer.alert(data);
+                    }
+                }
+            });
+        }
+        $(document).ready(function () {
+            var url = GetUrlRelativePath();
+            var patt1 = new RegExp(url);
+            //$(".layui-this").removeClass();
+            $(document.body).find('a').each(function (i, obj) {
+                var str = $(obj).attr('href');
+                if (patt1.test(str)) {
+                    $(obj).parent().addClass("layui-this");
+                    $(obj).parent().parent().parent().addClass(" layui-nav-itemed");
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

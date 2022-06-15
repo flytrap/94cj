@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+<form class="layui-form layui-form-pane">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+        <legend>章节反馈</legend>
+    </fieldset>
+    <h2>调用地址: http://IP地址:端口号/feedbackchapter?aid=[小说ID]&cid=[章节ID]</h2>
+    <br/>
+    <h2>这个可以直接调用,修复是下一次更新到本书时修复。展示旧没得了</h2>
+</form>
+<script>
+    layui.use(['form', 'jquery'], function () {
+        var $ = layui.jquery, form = layui.form;
+        //导航
+        $(document).ready(function () {
+            var url = GetUrlRelativePath();
+            var patt1 = new RegExp(url);
+            //$(".layui-this").removeClass();
+            $(document.body).find('a').each(function (i, obj) {
+                var str = $(obj).attr('href');
+                if (patt1.test(str)) {
+                    $(obj).parent().addClass("layui-this");
+                    $(obj).parent().parent().parent().addClass(" layui-nav-itemed");
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

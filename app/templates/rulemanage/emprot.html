@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+ <form class="layui-form">
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">规则:</label>
+        <div class="layui-input-block">
+ <textarea id="colltxt" name="colltxt" required lay-verify="required"
+           placeholder="" class="layui-textarea" style="height:456px">{{info}}</textarea>
+        </div>
+    </div>
+     </form>
+<script>
+    layui.use(['form','jquery'], function(){
+        var $=layui.jquery,form = layui.form;
+         //导航
+         $(document).ready(function() {
+            var url = GetUrlRelativePath();
+            var patt1 = new RegExp(url);
+            //$(".layui-this").removeClass();
+            $(document.body).find('a').each(function(i, obj) {
+                var str = $(obj).attr('href');
+                if (str == '/rulelist') {
+                    $(obj).parent().addClass("layui-this");
+                    $(obj).parent().parent().parent().addClass(" layui-nav-itemed");
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

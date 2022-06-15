@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<script>
+    layui.use(['form','jquery','table'], function(){
+        var $=layui.jquery,form = layui.form,table = layui.table;
+
+        $(document).ready(function() {
+            var url = GetUrlRelativePath();
+            var patt1 = new RegExp(url);
+            //$(".layui-this").removeClass();
+            $(document.body).find('a').each(function(i, obj) {
+                var str = $(obj).attr('href');
+                if (patt1.test(str)) {
+                    $(obj).parent().addClass("layui-this");
+                    $(obj).parent().parent().parent().addClass(" layui-nav-itemed");
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

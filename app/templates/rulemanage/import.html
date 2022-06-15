@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block content %}
+ <form class="layui-form">
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">规则:</label>
+        <div class="layui-input-block">
+ <textarea id="colltxt" name="规则内容" required lay-verify="required"
+           placeholder="规则内容" class="layui-textarea" style="height:456px"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="submit" class="layui-btn" lay-submit="" lay-filter="import">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重&nbsp;&nbsp;&nbsp;&nbsp;置</button>
+        </div>
+    </div>
+     </form>
+<script>
+    layui.use(['form','jquery'], function(){
+        var $=layui.jquery,form = layui.form;
+        //监听提交
+        form.on('submit(import)', function(data){
+            $.ajax({
+                url: '/addimport',
+                type:'POST',
+                data: data.field,
+                success: function (data) {
+                    if(data==='导入成功！'){
+                        window.location.href = '/rulelist'
+                    }
+                    else{
+                        layer.alert(data);
+                    }
+                }
+            });
+            return false;
+         });
+         //导航
+         $(document).ready(function() {
+            var url = GetUrlRelativePath();
+            var patt1 = new RegExp(url);
+            //$(".layui-this").removeClass();
+            $(document.body).find('a').each(function(i, obj) {
+                var str = $(obj).attr('href');
+                if (str == '/rulelist') {
+                    $(obj).parent().addClass("layui-this");
+                    $(obj).parent().parent().parent().addClass(" layui-nav-itemed");
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

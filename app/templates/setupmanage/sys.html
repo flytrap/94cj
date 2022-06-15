@@ -1,0 +1,231 @@
+{% extends 'base.html' %}
+{% block content %}
+<form class="layui-form layui-form-pane">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+        <legend>基础信息设置</legend>
+    </fieldset>
+    <div class="layui-form-item">
+        <label class="layui-form-label">程序版本</label>
+        <div class="layui-input-block">
+            <select id="version" name="目标版本" lay-verify="required">
+                <option value="">请选择</option>
+                <option value="1">杰奇1.7</option>
+                <option value="2">杰奇1.8</option>
+                <option value="3">杰奇2.3</option>
+                <option value="4">杰奇2.4</option>
+                <option value="5">杰奇3.0</option>
+                <option value="6">杰奇3.1(未兼容)</option>
+                <option value="7">船说优化版</option>
+                <option value="8">船说分表版</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">站点名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="站点名称" lay-verify="required" autocomplete="off"
+                   placeholder="请输入站点名称 如:笔趣阁"
+                   class="layui-input" value="{{info.站点名称}}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">站点地址</label>
+        <div class="layui-input-block">
+            <input type="text" name="站点地址" lay-verify="required" autocomplete="off"
+                   placeholder="请输入站点地址 如:http://www.biquge.com"
+                   class="layui-input" value="{{info.站点地址}}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">文本地址</label>
+        <div class="layui-input-block">
+            <input type="text" name="文本保存地址" lay-verify="required" autocomplete="off"
+                   placeholder="请输入内容保存位置 如:/www/wwwroot/www.biquge.com/files/artile/txt/"
+                   class="layui-input" value="{{info.文本保存地址}}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">文本格式</label>
+        <div class="layui-input-block">
+            <select id="charset" name="文本格式" lay-verify="required">
+                <option value="">请选择</option>
+                <option value="utf-8">utf-8</option>
+                <option value="gbk">gbk/gb2312</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">封面地址</label>
+        <div class="layui-input-block">
+            <input type="text" name="封面保存地址" lay-verify="required" autocomplete="off"
+                   placeholder="请输入封面图片保存位置 如:/www/wwwroot/www.biquge.com/files/artile/image/"
+                   class="layui-input" value="{{info.封面保存地址}}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">图片地址</label>
+        <div class="layui-input-block">
+            <input type="text" name="图片保存地址" lay-verify="required" autocomplete="off"
+                   placeholder="请输入内容图片保存位置  如:/www/wwwroot/www.biquge.com/files/artile/txtImg/"
+                   class="layui-input" value="{{info.图片保存地址}}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">图片前缀</label>
+        <div class="layui-input-block">
+            <input type="text" name="图片前缀地址" lay-verify="required" autocomplete="off"
+                   placeholder="请输入图片前缀地址 如:http://www.biquge.com/image/"
+                   class="layui-input" value="{{info.图片前缀地址}}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">所属人</label>
+        <div class="layui-input-block">
+            <input type="text" name="文件所属人" lay-verify="text" autocomplete="off"
+                   placeholder="请输入保存文件或者文件夹得用户,如: www 、root"
+                   class="layui-input" value="{{info.文件所属人}}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">生成OPF</label>
+        <div class="layui-input-block">
+            <select id="isOpf" name="是否生成OPF文件" lay-verify="required">
+                <option value="">请选择 没特殊要求请选择’是‘</option>
+                <option value="0">是</option>
+                <option value="1">否</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">输出规则</label>
+        <div class="layui-input-block">
+            <select id="isRuleID" name="是否输出规则ID" lay-verify="required">
+                <option value="">请选择 是否输出规则ID 没特殊要求请选择‘否’</option>
+                <option value="0">是</option>
+                <option value="1">否</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">默认分类</label>
+        <div class="layui-input-block">
+            <input type="text" name="默认分类ID" lay-verify="required" autocomplete="off"
+                   placeholder="请输入默认分类ID"
+                   class="layui-input" value="{{info.默认分类ID}}">
+        </div>
+    </div>
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+        <legend>数据库信息设置</legend>
+    </fieldset>
+    <div class="layui-form-item">
+        <label class="layui-form-label">数据库地址</label>
+        <div class="layui-input-block">
+            <input type="text" name="数据库地址" lay-verify="required" autocomplete="off"
+                   placeholder="请输入图片数据库地址 如:127.0.0.1"
+                   class="layui-input" value="{{info.数据库地址}}">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">数据库端口</label>
+        <div class="layui-input-block">
+            <input type="text" name="数据库端口" lay-verify="required" autocomplete="off"
+                   placeholder="请输入数据库端口 如:3306"
+                   class="layui-input" value="{{info.数据库端口}}">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">数据库前缀</label>
+        <div class="layui-input-block">
+            <input type="text" name="数据库前缀" lay-verify="required" autocomplete="off"
+                   placeholder="请输入数据库端口 如:jieqi_"
+                   class="layui-input" value="{{info.数据库前缀}}">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">数据库用户</label>
+        <div class="layui-input-block">
+            <input type="text" name="数据库用户" lay-verify="required" autocomplete="off"
+                   placeholder="请输入数据库用户 如:root"
+                   class="layui-input" value="{{info.数据库用户}}">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">数据库密码</label>
+        <div class="layui-input-block">
+            <input type="text" name="数据库密码" lay-verify="required" autocomplete="off"
+                   placeholder="请输入数据库密码 如:123456789"
+                   class="layui-input" value="{{info.数据库密码}}">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">数据库名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="数据库名称" lay-verify="required" autocomplete="off"
+                   placeholder="请输入数据库名称 如:jieqi"
+                   class="layui-input" value="{{info.数据库名称}}">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">数据库编码</label>
+        <div class="layui-input-block">
+            <select id="sql_charset" name="数据库编码" lay-verify="required">
+                <option value="">请选择</option>
+                <option value="utf8">utf-8</option>
+                <option value="gbk">gbk/gb2312</option>
+                <option value="utf8mb4">utf8mb4</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item" style="margin-top: 50px;">
+        <div class="layui-input-block">
+            <button type="submit" class="layui-btn" lay-submit="" lay-filter="save">提 交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重 置</button>
+        </div>
+    </div>
+</form>
+<script>
+    layui.use(['form','jquery'], function(){
+        var $=layui.jquery,form = layui.form;
+        $('#version').val('{{info.目标版本}}');
+        $('#charset').val('{{info.文本格式}}');
+        $('#isOpf').val('{{info.是否生成OPF文件}}');
+        $('#isRuleID').val('{{info.是否输出规则ID}}');
+        $('#sql_charset').val('{{info.数据库编码}}');
+        $('#log_charset').val('{{info.数据库编码}}');
+        form.render('select')
+        //监听提交
+        form.on('submit(save)', function(data){
+            var loading = layer.load(0, {shade: false});
+            $.ajax({
+                url: '/sys',
+                type:'POST',
+                data: data.field,
+                success: function (data) {
+                    layer.close(loading);
+                    layer.alert(data);
+                }
+            });
+            return false;
+         });
+        //导航
+        $(document).ready(function() {
+            var url = GetUrlRelativePath();
+            var patt1 = new RegExp(url);
+            //$(".layui-this").removeClass();
+            $(document.body).find('a').each(function(i, obj) {
+                var str = $(obj).attr('href');
+                if (patt1.test(str)) {
+                    $(obj).parent().addClass("layui-this");
+                    $(obj).parent().parent().parent().addClass(" layui-nav-itemed");
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

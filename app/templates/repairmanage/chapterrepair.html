@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="demoTable">
+    搜索：
+    <div class="layui-inline">
+        <input class="layui-input" name="搜索" id="keywords" autocomplete="off">
+    </div>
+    <button class="layui-btn" data-type="reload">搜索</button>
+</div>
+<table class="layui-hide" id="identchapter" lay-filter="identchapter"></table>
+<script type="text/html" id="barChapter">
+    <a class="layui-btn layui-btn-xs layui-btn-radius" lay-event="edit">&nbsp;手动修复&nbsp;</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs layui-btn-radius" lay-event="del">&nbsp;删 除&nbsp;</a>
+</script>
+<script>
+    layui.use(['form','jquery','table'], function(){
+        var $=layui.jquery,form = layui.form,table = layui.table;
+        //导航
+          table.render({
+            elem: '#identchapter'
+            ,url:'/getidentlist'
+            ,page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+              layout: ['count', 'prev', 'page', 'next', 'skip'] //自定义分页布局'limit'
+              ,curr: 1 //设定初始在第 5 页
+              ,groups: 1 //只显示 1 个连续页码
+              ,first: false //不显示首页
+              ,last: false //不显示尾页
+              ,limit:30
+              ,limits:[30]
+            }
+            ,cols: [[
+              {fixed: 'left',width:200, title: '操作', align:'center', toolbar: '#barChapter'}
+              ,{field:'错误ID', width:100, align:'center', title: '记录ID'}
+              ,{field:'小说ID', width:100, align:'center', title: '小说ID'}
+              ,{field:'标题', width:160, align:'left', title: '小说名称'}
+              ,{field:'章节ID', width:100, align:'center', title: '章节ID'}
+              ,{field:'章节名称', width:200, align:'left', title: '章节名称'}
+              ,{field:'错误时间', width:160, align:'center', title: '发生时间'}
+              ,{field:'地址', align:'left', title: '地址',minwidth:100}
+            ]]
+          });
+          table.on('tool(identchapter)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'del'){
+              layer.confirm('真的删除行么', function(index){
+                  $.ajax({
+                        url: '/delident?aid='+data.小说ID+'&cid=' + data.章节ID,
+                        success: function (data) {
+                            if(data=="删除成功！"){
+                                window.location.reload();
+                            }
+                            else{
+                                layer.alert(data);
+                            }
+                        }
+                });
+                layer.close(index);
+              });
+            }
+            else if(obj.event === 'edit'){
+                location.href = '/contentrepair?aid=' + obj.data.小说ID+'&cid='+obj.data.章节ID+'&title='+obj.data.标题+'&chaptertitle='+obj.data.章节名称;
+            }
+          });
+        var active = {
+            reload: function () {
+                var keys = $('#keywords');
+                //执行重载
+                table.reload('identchapter', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    , where: {
+                        key: keys.val()
+                    }
+                }, 'data');
+            }
+        };
+        $('.demoTable .layui-btn').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+        $(document).ready(function() {
+            var url = GetUrlRelativePath();
+            var patt1 = new RegExp(url);
+            //$(".layui-this").removeClass();
+            $(document.body).find('a').each(function(i, obj) {
+                var str = $(obj).attr('href');
+                if (patt1.test(str)) {
+                    $(obj).parent().addClass("layui-this");
+                    $(obj).parent().parent().parent().addClass(" layui-nav-itemed");
+                }
+            });
+        });
+    });
+
+</script>
+{% endblock %}

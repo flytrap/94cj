@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="layui-row layui-col-space10">
+    <div class="layui-col-md12">
+        <!-- 填充内容 -->
+        <div class="layui-card">
+            <div class="layui-card-header">{{info.任务ID}}</div>
+            <div class="layui-card-body">
+                <div class="layui-form-item">
+                    <p>任务ID: {{info.任务ID}}</p>
+                    <p>规则ID: {{info.规则ID}}</p>
+                    <p>任务名称: {{info.任务名称}}</p>
+                    <p>任务类型: {{info.任务类型}}</p>
+                    <p>任务间隔时间(s): {{info.任务间隔时间}}</p>
+                    <p>代理类型: {{info.代理类型}}</p>
+                    <p>代理信息: {{info.代理信息}}</p>
+                    <p>内容: {{info.内容}}</p>
+                    <p>地址: {{info.地址}}</p>
+                    <p>标识修复: {{info.标识修复}}</p>
+                    <p>字数修复: {{info.字数修复}}</p>
+                    <p>采集间隔: {{info.采集间隔}}</p>
+                    <p>重试次数: {{info.重试次数}}</p>
+                    <p>重试间隔: {{info.重试间隔}}</p>
+                    <p>对比方式: {{info.对比方式}}</p>
+                    <p>人工任务状态: {{info.人工任务状态}}</p>
+                    <p>系统任务状态: {{info.系统任务状态}}</p>
+                    <p>运行时间: {{info.运行时间}}</p>
+                    <p>起始ID: {{info.起始ID}}</p>
+                    <p>结束ID: {{info.结束ID}}</p>
+                    <p>顺序: {{info.顺序}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+layui.use(['form','jquery'], function(){
+        var $=layui.jquery,form = layui.form;
+        //导航
+        $(document).ready(function() {
+            var url = GetUrlRelativePath();
+            var patt1 = new RegExp(url);
+            //$(".layui-this").removeClass();
+            $(document.body).find('a').each(function(i, obj) {
+                var str = $(obj).attr('href');
+                if (str == "/tasklist") {
+                    $(obj).parent().addClass("layui-this");
+                    $(obj).parent().parent().parent().addClass(" layui-nav-itemed");
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}
